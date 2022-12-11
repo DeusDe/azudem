@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Channel</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+
+<body>
+<h1>
+    <%= api.channel_display_name %>
+</h1>
+<p>
+    <%= api %>
+</p>
+
+<p>
+    <%= stats %>
+</p>
+
+<img
+        class="channel_icon"
+        src=<%= api.thumbnail_url %>
+/>
+
+<img
+        class="channel_icon"
+        src=<%= api.offline_image_url %>
+/>
+
+<p>created at: <%= new Date(api.created_at).toLocaleDateString("en-US") %></p>
+
+</body>
+
+</html>
