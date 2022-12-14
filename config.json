@@ -1,0 +1,14 @@
+{
+  "tmi": {
+    "options": {
+      "debug": true
+    },
+    "connection": {
+      "reconnect": true,
+      "secure": true
+    },
+    "channels": [
+      "ungespielt"
+    ]
+  }
+}
