@@ -7,12 +7,15 @@ const URI = {
     base,
     auth: 'https://id.twitch.tv/oauth2/token',
     streams: base.concat('streams'),
-    channels: base.concat('channels'),
+    users: base.concat('users'),
+    videos: base.concat('videos'),
+    usersFollow: base.concat('users/follows')
 }
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const UNAUTHORIZED = 401;
-
+const BAD_REQUEST = 400;
+const NOT_FOUND = 404;
 const NEW_TOKEN_DELAY = 5000;
 
 
@@ -25,7 +28,7 @@ class API {
 
         this.#setAuthBody()
 
-        this.#getNewBasicToken()
+        this.#refreshAuthToken()
 
 
     }
@@ -106,29 +109,25 @@ class API {
         return new Date().valueOf();
     }
 
-
-    async #getNewBasicToken() {
-        if (this.#isCreatingNewToken() || this.#compareLastTokenCreation()) return false;
-        this.#setCreatingNewToken(true);
+    async #createAuthToken() {
         this.#updateLastTokenCreation()
+        this.#setCreatingNewToken(true);
 
-
-        let response;
-        try {
-            response = await axios.post(URI.auth, this.#getAuthBody());
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-
-        this.#setAccessToken(response.data.access_token)
-
+        const response = await axios.post(URI.auth, this.#getAuthBody());
+        const {access_token} = response.data;
+        this.#setAccessToken(access_token)
         this.#setAuthHeader();
         this.#setCreatingNewToken(false);
+    }
+
+    async #refreshAuthToken() {
+        if (this.#isCreatingNewToken() || this.#compareLastTokenCreation()) return false;
+        await this.#createAuthToken()
         return true;
     }
 
     #createQueryString(querys) {
+        if (querys === null || typeof querys === 'undefined') return "";
         const keys = Object.keys(querys)
         if (keys.length === 0) return "";
         let first = true;
@@ -149,39 +148,103 @@ class API {
         return await axios.get(URI, {headers: this.#getAuthHeader()})
     }
 
-    async getStream(querys) {
-        const queryStr = this.#createQueryString(querys);
+    async #authHeaderRequestWrapper(queryStr, uri) {
         let response;
         try {
-            response = await this.#authHeaderRequest(`${URI.streams}${queryStr}`)
+            response = await this.#authHeaderRequest(`${uri}${queryStr}`)
         } catch (error) {
+            const statusCode = error.response.data.status;
+            if (typeof error.response === 'undefined' || typeof error.response.data === 'undefined') {
+                return undefined;
+            } else if (statusCode === UNAUTHORIZED) {
 
-            if (typeof error.response === 'undefined') {
-                return undefined;
-            } else if (typeof error.response.data === 'undefined') {
-                return undefined;
-            } else if (error.response.data.status === UNAUTHORIZED) {
-                const tokenGenerated = await this.#getNewBasicToken();
+                if (error.response.data.message !== 'Invalid OAuth token') return;
+
+                const tokenGenerated = await this.#refreshAuthToken();
                 await delay(100);
                 if (!tokenGenerated) {
-                    return await this.getStream(querys);
+                    return await this.#authHeaderRequestWrapper(queryStr, uri)
                 }
+            } else if (statusCode === BAD_REQUEST) {
+                console.log(error.response.data.message)
+            } else if (statusCode === NOT_FOUND) {
+                console.log('SITE NOT FOUND')
             }
             return undefined;
         }
 
         if (typeof response === 'undefined') return undefined;
 
-        return response.data.data[0];
+        return response.data.data;
     }
 
-    async getStreamByName(channelName) {
-        return await this.getStream({'user_login': channelName});
+    async #callRequestWrapper(querys, uri) {
+        const queryStr = this.#createQueryString(querys);
+        return await this.#authHeaderRequestWrapper(queryStr, uri);
     }
 
-    async getStreamByID(channelID) {
-        return await this.getStream({'id': channelID});
+    async #callRequestWrapperSingle(querys, uri) {
+        const response = await this.#callRequestWrapper(querys, uri);
+        return response[0];
     }
+
+    //Streams
+
+    async getStream(querys) {
+        return await this.#callRequestWrapper(querys, URI.streams)
+    }
+
+    async getStreamByChannelName(channelName) {
+        const channels = await this.getStream({'user_login': channelName})
+        return await channels[0];
+    }
+
+    async getStreamByChannelID(channelID) {
+        const channels = await this.getStream({'id': channelID});
+        return await channels[0];
+    }
+
+    async getUser(querys) {
+        return await this.#callRequestWrapper(querys, URI.users);
+    }
+
+    async getUserByChannelName(channelName) {
+        const users = await this.getUser({'login': channelName})
+        return await users[0];
+    }
+
+    async getUserByChannelID(channelID) {
+        const users = await this.getUser({'id': channelID})
+        return await users[0];
+    }
+
+    // MULTIPLE RESPONSE
+
+    async getVideo(querys) {
+        return await this.#callRequestWrapper(querys, URI.videos)
+    }
+
+    async getVideoByChannelID(channelID) {
+        return await this.getVideo({'user_id': channelID})
+    }
+
+    async getFollowList(querys) {
+        return await this.#callRequestWrapper(querys, URI.usersFollow)
+    }
+
+    async getFollowListFromID(channelID) {
+        return await this.getFollowList({'from_id': channelID})
+    }
+
+    async getFollowListToID(channelID) {
+        return await this.getFollowList({'to_id': channelID})
+    }
+
+    async getBlocklist(querys) {
+        const queryStr = this.#createQueryString(querys);
+        return this.#authHeaderRequestWrapper(queryStr, URI.base.concat('users/follows'));
+    }
+
 }
 
 const api = new API('ozjxskqcv0gz8cw0g5a3q6tca9zv04', '8gg3e9sf754t1mq9ydmhum29vnarfa')
