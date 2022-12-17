@@ -1,8 +1,5 @@
-//TWITCH Internet Relay Chat
+const conf = require('../src/conf/config.json');
+const {IRC} = require("../src/twitch/irc/irc");
 
-const tmi = require('tmi.js');
 
-const conf = require('../config.json');
-
-client = tmi.Client(conf.tmi)
-client.connect()
+const twitchIRC = new IRC(conf.tmi)

@@ -1,6 +1,10 @@
 const axios = require('axios');
 const {client} = require("tmi.js");
 
+const dotenv = require('dotenv');
+dotenv.config()
+const env = process.env;
+
 const base = 'https://api.twitch.tv/helix/';
 
 const URI = {
@@ -245,9 +249,12 @@ class API {
         return this.#authHeaderRequestWrapper(queryStr, URI.base.concat('users/follows'));
     }
 
+    static createDefaultAPI() {
+        return new this(env.TWITCH_CLIENT_ID, env.TWITCH_CLIENT_SECRET);
+    }
+
 }
 
-const api = new API('ozjxskqcv0gz8cw0g5a3q6tca9zv04', '8gg3e9sf754t1mq9ydmhum29vnarfa')
-exports.API = api;
+module.exports = API
 
 

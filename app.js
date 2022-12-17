@@ -5,23 +5,23 @@ var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var channelRouter = require('./routes/channel')
-var apiRouter = require('./routes/api')
+var indexRouter = require('./src/express/routes/index');
+var usersRouter = require('./src/express/routes/users');
+var channelRouter = require('./src/express/routes/channel')
+var apiRouter = require('./src/express/routes/api')
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/express/views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(lessMiddleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(lessMiddleware(path.join(__dirname, 'src/express/public')));
+app.use(express.static(path.join(__dirname, 'src/express/public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

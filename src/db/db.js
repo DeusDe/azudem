@@ -1,7 +1,7 @@
 const mongodb = require('mongodb');
 const mongoose = require('mongoose')
-const dotenv = require('dotenv')
 const {ObjectID} = require("mongodb");
+const dotenv = require('dotenv')
 dotenv.config()
 const env = process.env;
 
@@ -13,7 +13,7 @@ const liveInfo = require('./Shemas/twitchAPI/liveInfoShema.js').LiveInfo;
 
 //import Message from './Shemas/twitchAPI/messageShema.js';
 
-class database {
+module.exports = class database {
   constructor(URI) {
     try {
       mongoose.connect(URI, {serverApi: mongodb.ServerApiVersion.v1}, () =>
@@ -51,10 +51,7 @@ class database {
 
 }
 
-const db = new database(
-    `${env.MONGODB_URI}/azudemstats?retryWrites=true&w=majority`,
-);
 
-exports.db = db;
+//exports.db = db;
 
 

@@ -1,5 +1,5 @@
 var express = require('express');
-const db = require("../db/db").db;
+const db = require("../../db/db").db;
 var router = express.Router();
 
 router.get("/e", function (req, res, next) {
@@ -48,7 +48,7 @@ router.get("/twitch/:param", async (req, res) => {
         } else {
             res.status(400).send("BAD REQUEST");
         }
-    } else res.send('303')
+    } //else res.send('303')
 })
 
 

@@ -1,13 +1,13 @@
 //Twitch API
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+const tools = require('../src/tools/tools')
 
-const twitchAPI = require('../twitch/api/api').API;
+const twitchAPI = require('../src/twitch/api/api').createDefaultAPI();
 
 async function test() {
-    await delay(1000)
-    //console.log(await twitchAPI.getUserByChannelName('ungespielt'));
-    //console.log(await twitchAPI.getVideoByChannelID('36983084'));
-    //console.log(await twitchAPI.getFollowListToID(36983084))
+    await tools.delay(1000)
+    console.log(await twitchAPI.getUserByChannelName('ungespielt'));
+    console.log(await twitchAPI.getVideoByChannelID('36983084'));
+    console.log(await twitchAPI.getFollowListToID(36983084))
 
 }
 
