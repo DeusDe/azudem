@@ -1,13 +1,10 @@
 {
   "name": "untitled2",
-  "version": "0.0.0",
+  "version": "Pre-Alpha-0.0.1",
   "private": true,
   "scripts": {
-    "www-start": "node bin/www",
-    "www-dev": "nodemon bin/www",
-    "tapi-start": "node ./bin/tapi",
-    "tapi-dev": "nodemon ./bin/tapi",
-    "discord-dev": "nodemon ./bin/discord-bot.js"
+    "www-start": "node bin/Express_Server.js",
+    "www-dev": "nodemon bin/Express_Server.js"
   },
   "dependencies": {
     "axios": "^1.2.1",
