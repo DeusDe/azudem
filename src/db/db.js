@@ -11,14 +11,13 @@ console.log(env.MONGODB_URI)
 
 const liveInfo = require('./Shemas/twitchAPI/liveInfoShema.js').LiveInfo;
 
-//import Message from './Shemas/twitchAPI/messageShema.js';
 
 module.exports = class database {
   constructor(URI) {
+    mongoose.set('strictQuery', false)
     try {
-      mongoose.connect(URI, {serverApi: mongodb.ServerApiVersion.v1}, () =>
-          console.log(' Mongoose is connected'),
-      );
+      mongoose.connect(URI, {serverApi: mongodb.ServerApiVersion.v1}, () => {
+      })
     } catch (e) {
       console.log('could not connect');
     }
@@ -50,8 +49,3 @@ module.exports = class database {
   }
 
 }
-
-
-//exports.db = db;
-
-
