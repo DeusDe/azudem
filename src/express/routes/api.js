@@ -1,5 +1,9 @@
 var express = require('express');
-const db = require("../../db/db").db;
+const dotenv = require('dotenv')
+dotenv.config()
+const env = process.env;
+const DB = require("../../db/db");
+const db = new DB(`${env.MONGODB_URI}/azudemstats?retryWrites=true&w=majority`);
 var router = express.Router();
 
 router.get("/e", function (req, res, next) {

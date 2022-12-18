@@ -5,7 +5,11 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 
+
+<%- include('partials/header.ejs') %>
+
 <body>
+
 <h1>
     <%= api.channel_display_name %>
 </h1>
@@ -28,6 +32,8 @@
 />
 
 <p>created at: <%= new Date(api.created_at).toLocaleDateString("en-US") %></p>
+
+<%- include('partials/footer.ejs') %>
 
 </body>
 
