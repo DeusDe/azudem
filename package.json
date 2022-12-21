@@ -1,10 +1,15 @@
 {
   "name": "untitled2",
-  "version": "Pre-Alpha-0.0.1",
+  "version": "Pre-Alpha-0.0.2",
   "private": true,
   "scripts": {
     "www-start": "node bin/Express_Server.js",
-    "www-dev": "nodemon bin/Express_Server.js"
+    "www-dev": "nodemon bin/Express_Server.js",
+    "mess-dev": "nodemon bin/Messenger.js",
+    "mong-dev": "nodemon bin/MongoDB.js",
+    "disc-dev": "nodemon bin/Discord_Bot.js",
+    "tapi-dev": "nodemon bin/Twitch_API.js",
+    "tirc-dev": "nodemon bin/Twitch_IRC.js"
   },
   "dependencies": {
     "axios": "^1.2.1",
@@ -19,6 +24,7 @@
     "mongodb": "^4.12.1",
     "mongoose": "^6.8.0",
     "morgan": "^1.10.0",
-    "tmi.js": "^1.8.5"
+    "tmi.js": "^1.8.5",
+    "chart.js": "^4.1.1"
   }
 }

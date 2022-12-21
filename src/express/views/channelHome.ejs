@@ -1,0 +1,27 @@
+<%- include('partials/header.ejs') %>
+
+<div class="mainWrapper">
+
+    <div class="channel_card_wrapper">
+        <% for (const element of channels){ %>
+        <div class="channel_card" value=<%= element.channel_name %>>
+            <img class="icon" src=<%= element.thumbnail_url %>>
+            <div class="title"><%= element.channel_display_name %></div>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+
+<script>
+    const cards = document.getElementsByClassName('channel_card');
+    for (const card of cards) {
+        card.addEventListener('click', e => {
+            window.location.href = `channel/${card.attributes.value.value}`
+        })
+    }
+
+</script>
+
+
+<%- include('partials/footer.ejs') %>

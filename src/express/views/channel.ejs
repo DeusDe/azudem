@@ -5,36 +5,51 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 
-
 <%- include('partials/header.ejs') %>
 
 <body>
 
-<h1>
-    <%= api.channel_display_name %>
-</h1>
-<p>
-    <%= api %>
-</p>
+<div class="mainWrapper">
 
-<p>
-    <%= stats %>
-</p>
+    <div class="stream_info">
 
-<img
-        class="channel_icon"
-        src=<%= api.thumbnail_url %>
-/>
+        <img
+                class="channel_icon"
+                src=<%= api.thumbnail_url %>
+        />
 
-<img
-        class="channel_icon"
-        src=<%= api.offline_image_url %>
-/>
+        <div class="info_bar">
+            <div class="stream_title"><%= api.channel_display_name %></div>
+            <div class="stream_creation">Channel Created
+                at: <%= new Date(api.created_at).toLocaleDateString("en-US") %></div>
+            <div class="hours_streamed">Hours Streamed N/A</div>
+            <div class="peak_viewers">Peak Viewers N/A</div>
+            <div class="viewer_hours">Viewer Hours N/A</div>
+            <div class="last_seen">Last Seen N/A</div>
 
-<p>created at: <%= new Date(api.created_at).toLocaleDateString("en-US") %></p>
+        </div>
+
+        <iframe
+                class="stream"
+                src="https://player.twitch.tv/?<%= api.channel_display_name %>&parent=localhost&muted=true"
+                allowfullscreen>
+        </iframe>
+
+
+    </div>
+
+    <div class="stream_stats">
+        <canvas id="myChart"></canvas>
+    </div>
+
+</div>
+
+<div id="data"><%- JSON.stringify(stats); %></div>
 
 <%- include('partials/footer.ejs') %>
-
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="../javascripts/charts.js"></script>
 </body>
 
 </html>

@@ -44,8 +44,8 @@ module.exports = class database {
 
   }
 
-  async getStreamStats(id) {
-    return liveInfo.Model.find({inherited_by_channel: id}).limit(20);
+  async getStreamStats(id, limit) {
+    return liveInfo.Model.find({inherited_by_channel: id}).limit(limit);
   }
 
 }

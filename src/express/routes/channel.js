@@ -7,8 +7,9 @@ const db = new DB(`${env.MONGODB_URI}/azudemstats?retryWrites=true&w=majority`);
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.send("Yes");
+router.get('/', async function (req, res, next) {
+    const channels = await db.findNumberOfChannel(20);
+    res.render('channelHome', {channels: channels.data})
 });
 
 router.get("/:channel", async function (req, res, next) {
@@ -17,21 +18,28 @@ router.get("/:channel", async function (req, res, next) {
 
     //If Channel was not found
     if (typeof channel === 'undefined' || channel === null) {
-        res.send('Channel Not Found')
+        res.render('error', {
+            message: 'Channel Not Found',
+            error: {
+                status: 404,
+                stack: {}
+            }
+        })
         return;
     }
-    const stats = await db.getStreamStats(channel._id);
-    const t = [];
+    const stats = await db.getStreamStats(channel._id, 20);
+    const date = [];
+    const viewer_count = [];
     for (const element of stats) {
-        t.push({views: element.viewer_count, time: element.timestamp})
-        console.log(element)
+        date.push(new Date(element.timestamp).toLocaleString());
+        viewer_count.push(element.viewer_count);
     }
 
     res.render('channel',
         {
             channelName: req.params.channel,
             api: channel,
-            stats: t
+            stats: {x: date, y: viewer_count}
         }
     );
 })

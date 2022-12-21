@@ -47,7 +47,7 @@ router.get("/twitch/:param", async (req, res) => {
         if (values.includes("channel_name")) {
 
         } else if (values.includes("channel_id")) {
-            const stats = await db.getStreamStats(req.query.channel_id);
+            const stats = await db.getStreamStats(req.query.channel_id, 20);
             res.send(stats);
         } else {
             res.status(400).send("BAD REQUEST");
