@@ -67,6 +67,9 @@ a:hover {
   }
 
   .channel_card_wrapper {
+  var {
+    display: none
+  }
     background-color: lightgray;
     width: 75vw;
     display: flex;
@@ -75,10 +78,37 @@ a:hover {
     align-items: center;
     justify-content: center;
 
+
     .channel_card {
       border-radius: 25px;
       flex: 1 0 21%;
       max-width: 21%;
+
+      @media @desktop_big {
+        flex: 1 0 17%;
+        max-width: 17%;
+      }
+
+      @media @desktop {
+        flex: 1 0 21%;
+        max-width: 21%;
+      }
+
+      @media @desktop_small {
+        flex: 1 0 28%;
+        max-width: 28%;
+      }
+
+      @media @tablet {
+        flex: 1 0 42%;
+        max-width: 42%;
+      }
+
+      @media @smartphone {
+        flex: 1 0 85%;
+        max-width: 85%;
+      }
+
       background-color: gray;
       height: 100%;
       margin: 25px;
@@ -98,7 +128,44 @@ a:hover {
       }
 
     }
+
+
   }
+
+  .site_button {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3vw;
+    background-color: lightgray;
+    width: 75vw;
+    padding-bottom: 20px;
+
+    div {
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      font-size: 25px;
+      width: 100px;
+      border-radius: 20px;
+      background-color: @header-bg;
+    }
+
+    select {
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+      font-size: 25px;
+      width: 100px;
+      border-radius: 20px;
+      background-color: @header-bg;
+    }
+
+  }
+
+
 }
 
 header {

@@ -11,7 +11,7 @@ const indexRouter = require('./src/express/routes/index');
 const usersRouter = require('./src/express/routes/users');
 const channelRouter = require('./src/express/routes/channel');
 const apiRouter = require('./src/express/routes/api');
-
+const botRouter = require('./src/express/routes/bot')
 const app = express();
 
 // view engine setup
@@ -29,6 +29,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/channel', channelRouter)
 app.use('/api', apiRouter)
+app.use('/bot', botRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -36,7 +36,7 @@ module.exports = class database {
         return chaBuf !== null;
     }
 
-    async findNumberOfChannel(number) {
+    async findNumberOfChannel(number, page) {
         if (typeof number === 'undefined') {
             number = 20;
         } else if (number > 100) {
@@ -44,7 +44,7 @@ module.exports = class database {
         } else if (number < 1) {
             return {status: 'number is too low'}
         }
-        const data = await channel.Model.find({}).limit(number);
+        const data = await channel.Model.find({}).skip(page * number).limit(number);
         return {status: 'success', data}
 
     }

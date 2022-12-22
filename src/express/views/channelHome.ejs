@@ -4,22 +4,50 @@
 
     <div class="channel_card_wrapper">
         <% for (const element of channels){ %>
-        <div class="channel_card" value=<%= element.channel_name %>>
-            <img class="icon" src=<%= element.thumbnail_url %>>
-            <div class="title"><%= element.channel_display_name %></div>
-        </div>
+            <div class="channel_card">
+                <var class="channel_raw_name"><%= element.channel_name %></var>
+                <img class="icon" src=<%= element.thumbnail_url %>>
+                <div class="title"><%= element.channel_display_name %></div>
+            </div>
         <% } %>
     </div>
+    <div class="site_button">
+        <div id="prev_button">prev</div>
+        <select name="size" id="size_selector">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <div id="next_button">next</div>
+    </div>
+
 </div>
 
 
 <script>
+    const site = <%= site+1 %>;
+    const size = <%= size %>
     const cards = document.getElementsByClassName('channel_card');
+    const nextButton = document.getElementById('next_button');
+    const prevButton = document.getElementById('prev_button');
+    const selector = document.getElementById('size_selector')
+
+    selector.value = size;
+
     for (const card of cards) {
         card.addEventListener('click', e => {
-            window.location.href = `channel/${card.attributes.value.value}`
+            window.location.href = `channel/${card.querySelector('.channel_raw_name').innerHTML}`
         })
     }
+
+    nextButton.addEventListener('click', e => {
+        window.location.href = `channel?site=${site + 1}&size=${selector.value}`
+    })
+
+    prevButton.addEventListener('click', e => {
+        window.location.href = `channel?site=${site - 1}&size=${selector.value}`
+    })
+
 
 </script>
 
