@@ -1,6 +1,6 @@
 {
   "name": "untitled2",
-  "version": "Pre-Alpha-0.0.2",
+  "version": "Pre-Alpha-0.0.3",
   "private": true,
   "scripts": {
     "www-start": "node bin/Express_Server.js",
@@ -9,7 +9,8 @@
     "mong-dev": "nodemon bin/MongoDB.js",
     "disc-dev": "nodemon bin/Discord_Bot.js",
     "tapi-dev": "nodemon bin/Twitch_API.js",
-    "tirc-dev": "nodemon bin/Twitch_IRC.js"
+    "tirc-dev": "nodemon bin/Twitch_IRC.js",
+    "gath-dev": "nodemon bin/gatherer.js"
   },
   "dependencies": {
     "axios": "^1.2.1",

@@ -1,9 +1,10 @@
 var express = require('express');
+const tools = require('../../tools/tools')
 const dotenv = require('dotenv')
 dotenv.config()
 const env = process.env;
 const DB = require("../../db/db");
-const db = new DB(`${env.MONGODB_URI}/azudemstats?retryWrites=true&w=majority`);
+const db = new DB(`${env.MONGODB_URI}/${tools.conf.database.stats_database}?retryWrites=true&w=majority`);
 var router = express.Router();
 
 /* GET home page. */
@@ -27,9 +28,10 @@ router.get("/:channel", async function (req, res, next) {
         })
         return;
     }
-    const stats = await db.getStreamStats(channel._id, 20);
+    const stats = await db.getStreamStats(channel.channel_id, 20);
     const date = [];
     const viewer_count = [];
+    console.log(channel)
     for (const element of stats) {
         date.push(new Date(element.timestamp).toLocaleString());
         viewer_count.push(element.viewer_count);

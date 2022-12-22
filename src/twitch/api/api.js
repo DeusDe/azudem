@@ -157,12 +157,13 @@ class API {
         try {
             response = await this.#authHeaderRequest(`${uri}${queryStr}`)
         } catch (error) {
-            const statusCode = error.response.data.status;
             if (typeof error.response === 'undefined' || typeof error.response.data === 'undefined') {
                 return undefined;
-            } else if (statusCode === UNAUTHORIZED) {
+            }
+            const statusCode = error.response.data.status;
+            if (statusCode === UNAUTHORIZED) {
 
-                if (error.response.data.message !== 'Invalid OAuth token') return;
+                if (error.response.data.message !== 'Invalid OAuth token') return undefined;
 
                 const tokenGenerated = await this.#refreshAuthToken();
                 await delay(100);
@@ -170,7 +171,7 @@ class API {
                     return await this.#authHeaderRequestWrapper(queryStr, uri)
                 }
             } else if (statusCode === BAD_REQUEST) {
-                console.log(error.response.data.message)
+                console.log(error.response.data.message, `${uri}${queryStr}`)
             } else if (statusCode === NOT_FOUND) {
                 console.log('SITE NOT FOUND')
             }
@@ -200,12 +201,17 @@ class API {
 
     async getStreamByChannelName(channelName) {
         const channels = await this.getStream({'user_login': channelName})
-        return await channels[0];
+        return this.#return_singleElement(channels);
     }
 
     async getStreamByChannelID(channelID) {
         const channels = await this.getStream({'id': channelID});
-        return await channels[0];
+        return this.#return_singleElement(channels);
+    }
+
+    #return_singleElement(arr) {
+        if (typeof arr === "undefined" || arr === null) return undefined;
+        else return arr[0]
     }
 
     async getUser(querys) {
@@ -214,12 +220,12 @@ class API {
 
     async getUserByChannelName(channelName) {
         const users = await this.getUser({'login': channelName})
-        return await users[0];
+        return this.#return_singleElement(users);
     }
 
     async getUserByChannelID(channelID) {
         const users = await this.getUser({'id': channelID})
-        return await users[0];
+        return this.#return_singleElement(users);
     }
 
     // MULTIPLE RESPONSE

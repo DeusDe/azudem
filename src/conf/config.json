@@ -10,5 +10,11 @@
     "channels": [
       "ungespielt"
     ]
+  },
+  "database": {
+    "stats_database": "azudemstats"
+  },
+  "gatherer": {
+    "info_delay": 60
   }
 }

@@ -1,17 +1,20 @@
 const mongoose = require('mongoose')
 
 const liveInfo = new mongoose.Schema({
-  timestamp: Date,
-  started_at: Date,
-  user_id: String,
-  channel_id: String,
-  game_id: String,
-  title: String,
-  viewer_count: Number,
-  language: String,
-  tag_ids: [],
-  is_mature: Boolean,
-  inherited_by_channel: mongoose.Types.ObjectId,
+    channel_id: String,
+    channel_name: String,
+    stream_id: String,
+    channel_display_name: String,
+    timestamp: Date,
+    game_id: String,
+    type: String,
+    title: String,
+    viewer_count: Number,
+    started_at: Date,
+    language: String,
+    tag_ids: Array,
+    tags: Array,
+    is_mature: Boolean,
 });
 
 const LifeInfo = {

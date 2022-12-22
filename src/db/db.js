@@ -23,29 +23,43 @@ module.exports = class database {
     }
   }
 
-  async findChannelByID(channel_id) {
-    return channel.Model.findOne({channel_id});
-  }
-
-  async findChannelByName(channel_name) {
-    return channel.Model.findOne({channel_name});
-  }
-
-  async findNumberOfChannel(number) {
-    if (typeof number === 'undefined') {
-      number = 20;
-    } else if (number > 100) {
-      return {status: 'number is too high'}
-    } else if (number < 1) {
-      return {status: 'number is too low'}
+    async findChannelByID(channel_id) {
+        return channel.Model.findOne({channel_id});
     }
-    const data = await channel.Model.find({}).limit(number);
-    return {status: 'success', data}
 
-  }
+    async findChannelByName(channel_name) {
+        return channel.Model.findOne({channel_name});
+    }
 
-  async getStreamStats(id, limit) {
-    return liveInfo.Model.find({inherited_by_channel: id}).limit(limit);
-  }
+    async channelExists(id) {
+        const chaBuf = await channel.Model.findOne({channel_id: id});
+        return chaBuf !== null;
+    }
+
+    async findNumberOfChannel(number) {
+        if (typeof number === 'undefined') {
+            number = 20;
+        } else if (number > 100) {
+            return {status: 'number is too high'}
+        } else if (number < 1) {
+            return {status: 'number is too low'}
+        }
+        const data = await channel.Model.find({}).limit(number);
+        return {status: 'success', data}
+
+    }
+
+    async getStreamStats(id, limit) {
+        return liveInfo.Model.find({channel_id: id}).limit(limit);
+    }
+
+    async createChannel(chnl) {
+        if (await this.channelExists(chnl.channel_id)) return;
+        channel.Model.create(chnl);
+    }
+
+    async createLiveInfo(info) {
+        liveInfo.Model.create(info)
+    }
 
 }
