@@ -1,5 +1,6 @@
 var express = require('express');
 const dotenv = require('dotenv')
+const sanitize = require('mongo-sanitize')
 dotenv.config()
 const tools = require('../../tools/tools')
 const env = process.env;
@@ -25,14 +26,14 @@ router.get("/twitch/:param", async (req, res) => {
         const values = Object.keys(req.query);
         console.log(values)
         if (values.includes("channel_name")) {
-            const channel = await db.findChannelByName(req.query.channel_name);
+            const channel = await db.findChannelByName(sanitize(req.query.channel_name));
             res.send([channel]);
 
         } else if (values.includes("channel_id")) {
-            const channel = await db.findChannelByID(req.query.channel_id);
+            const channel = await db.findChannelByID(sanitize(req.query.channel_id));
             res.send([channel]);
         } else {
-            const channel = await db.findNumberOfChannel(req.query.number);
+            const channel = await db.findNumberOfChannel(sanitize(req.query.number));
             if (channel.status === 'success') {
                 res.send(channel.data)
             } else {
@@ -50,7 +51,7 @@ router.get("/twitch/:param", async (req, res) => {
         if (values.includes("channel_name")) {
 
         } else if (values.includes("channel_id")) {
-            const stats = await db.getStreamStats(req.query.channel_id, 20);
+            const stats = await db.getStreamStats(sanitize(req.query.channel_id), 20);
             res.send(stats);
         } else {
             res.status(400).send("BAD REQUEST");

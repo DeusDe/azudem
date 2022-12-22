@@ -57,7 +57,6 @@ class twitchGatherer {
         })
     }
 
-
 }
 
 module.exports = twitchGatherer;

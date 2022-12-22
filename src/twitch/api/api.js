@@ -15,6 +15,7 @@ const URI = {
     videos: base.concat('videos'),
     usersFollow: base.concat('users/follows')
 }
+const REQUEST_LIMIT = 800;
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const UNAUTHORIZED = 401;
@@ -26,6 +27,7 @@ const NEW_TOKEN_DELAY = 5000;
 class API {
     constructor(clientID, clientSecret) {
 
+        this.currentRequests = 0;
         this.#setClientID(clientID)
         this.#setClientSecret(clientSecret)
 
@@ -184,6 +186,21 @@ class API {
     }
 
     async #callRequestWrapper(querys, uri) {
+        let waitCount = 0;
+
+        while (this.currentRequests >= REQUEST_LIMIT && waitCount < 5) {
+            await delay(5_000)
+            waitCount++
+        }
+
+        if (waitCount === 5) {
+            console.log("TOO MANY REQUESTS PLEASE CHANGE THE REQUEST AMOUNT");
+            return 'undefined'
+        }
+
+        this.currentRequests++;
+        setTimeout(e => (this.currentRequests--), 1000);
+
         const queryStr = this.#createQueryString(querys);
         return await this.#authHeaderRequestWrapper(queryStr, uri);
     }
