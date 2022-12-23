@@ -9,10 +9,15 @@ dotenv.config()
 
 const env = process.env;
 const DB = require("../db/db");
+const {create} = require("axios");
 const db = new DB(`${env.MONGODB_URI}/${tools.conf.database.stats_database}?retryWrites=true&w=majority`);
 
 
 class twitchGatherer {
+
+    constructor() {
+        this.activeGatherer = []
+    }
 
     async getChannel(channel) {
         const channelData = await twitchAPI.getUserByChannelName(channel)
@@ -56,6 +61,18 @@ class twitchGatherer {
             timestamp: new Date(),
         })
     }
+
+    createLiveInfoInterval(channel,time){
+        const intervalID = setInterval(e => {
+            this.getLiveInfo(channel)
+        },time)
+
+        this.activeGatherer.push({channel,intervalID});
+    }
+
+
+
+
 
 }
 

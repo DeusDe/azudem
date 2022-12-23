@@ -10,7 +10,7 @@ const channel = require('./Shemas/twitchAPI/channelShema').Channel;
 console.log(env.MONGODB_URI)
 
 const liveInfo = require('./Shemas/twitchAPI/liveInfoShema.js').LiveInfo;
-
+const user = require('./Shemas/www/userShema').User;
 
 module.exports = class database {
   constructor(URI) {
@@ -62,4 +62,12 @@ module.exports = class database {
         liveInfo.Model.create(info)
     }
 
+    async userExists(username){
+        const userBuf = await user.Model.findOne({username});
+        return userBuf !== null;
+    }
+
+    async findUserByUsername(username){
+      return user.Model.findOne({username});
+    }
 }

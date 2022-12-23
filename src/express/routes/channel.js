@@ -6,7 +6,7 @@ dotenv.config()
 const env = process.env;
 const DB = require("../../db/db");
 const {parse} = require("dotenv");
-const db = new DB(`${env.MONGODB_URI}/${tools.conf.database.stats_database}?retryWrites=true&w=majority`);
+const db = new DB(`${tools.env.MONGODB_URI}/${tools.conf.database.stats_database}?retryWrites=true&w=majority`);
 var router = express.Router();
 
 /* GET home page. */
